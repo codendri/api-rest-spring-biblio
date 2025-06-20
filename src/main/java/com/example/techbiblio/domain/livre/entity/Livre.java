@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
-@Entity
-public class Livre extends BaseEntity {
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Setter
+//@Getter
+//@Entity
+public class Livre {
 
 
 
