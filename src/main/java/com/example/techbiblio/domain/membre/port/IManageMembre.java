@@ -1,17 +1,23 @@
 package com.example.techbiblio.domain.membre.port;
 
 import com.example.techbiblio.domain.membre.entity.Membre;
-import com.example.techbiblio.domain.entity.PageableDto;
+import com.example.techbiblio.domain.entity.PageableDTO;
+import com.example.techbiblio.domain.membre.entity.MembreDto;
 import org.springframework.data.domain.Page;
+
+import java.util.Optional;
 
 public interface IManageMembre {
 
-   public Page<Membre> findPaginated(
-            PageableDto pageableDto
-    );
+   Page<Membre> findPaginated(
+            PageableDTO pageable
+   );
 
    Long count();
 
-  public Membre save(Membre membre);
+
+  Membre save(MembreDto membreDto);
+
+  Optional<Membre> findById(Long id);
 
 }

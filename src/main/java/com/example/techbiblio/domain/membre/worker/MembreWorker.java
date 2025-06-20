@@ -1,7 +1,8 @@
 package com.example.techbiblio.domain.membre.worker;
 
+import com.example.techbiblio.domain.entity.PageableDTO;
 import com.example.techbiblio.domain.membre.entity.Membre;
-import com.example.techbiblio.domain.entity.PageableDto;
+import com.example.techbiblio.domain.membre.entity.MembreDto;
 import com.example.techbiblio.domain.membre.port.MembreDomain;
 import com.example.techbiblio.infrastructure.local.db.MembreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import org.springframework.stereotype.Service;
 
-@Component
+import java.util.Optional;
+
+
+@Service
 public class MembreWorker implements MembreDomain {
 
     @Autowired
@@ -21,10 +24,12 @@ public class MembreWorker implements MembreDomain {
 
 
     @Override
-    public Page<Membre> findPaginated(PageableDto pageableDto) {
+    public Page<Membre> findPaginated(PageableDTO pagea) {
 
-        Sort sort = pageableDto.getSortDir().equals(Sort.Direction.ASC.name()) ? Sort.by(pageableDto.getSortField()).ascending() : Sort.by(pageableDto.getSortField()).descending();
-        Pageable pageable = PageRequest.of(pageableDto.getPageNo() - 1, pageableDto.getPageSize(), sort);
+        String sortD = pagea.getSortDir();
+
+        Sort sort = sortD.equals(Sort.Direction.ASC.name()) ? Sort.by(pagea.getSortField()).ascending() : Sort.by(pagea.getSortField()).descending();
+        Pageable pageable = PageRequest.of(pagea.getPageNo() - 1, pagea.getPageSize(), sort);
         return membreRepository.findAll(pageable);
 
     }
@@ -34,31 +39,23 @@ public class MembreWorker implements MembreDomain {
         return membreRepository.count();
     }
 
+
+
     @Override
-    public Membre save(Membre membre) {
+    public Membre save(MembreDto membreDto) {
 
-        HashMap<String,String> errors = new HashMap<>();
-        Membre save =membre;
-        Membre data = null;
+        Membre save = new Membre();
 
-        if(save.getNom().isEmpty()){
-            errors.put("nom","Le champ nom est requis");
-        }
+        save.setNom(membreDto.getNom());
+        save.setEmail(membreDto.getEmail());
+        save.setDateMembership(membreDto.getDateMembership());
+        save.setStatut(membreDto.getStatut());
 
-        if(save.getEmail().isEmpty()){
-            errors.put("email","Le champ email est requis");
-        }
+        return membreRepository.save(save);
+    }
 
-        if(save.getDateMembership()==null){
-            errors.put("dateMembership","Le champ date d'adhésion est requis");
-        }
-
-        if(errors.isEmpty()){
-
-            data = membreRepository.save(save);
-
-        }
-
-        return data;
+    @Override
+    public Optional<Membre> findById(Long id) {
+        return Optional.empty();
     }
 }
