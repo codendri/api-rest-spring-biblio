@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: compose-postgres
+      POSTGRES_USER: compose-postgres
+      POSTGRES_PASSWORD: compose-postgres
